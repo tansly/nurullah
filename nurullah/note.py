@@ -62,8 +62,8 @@ class Note(object):
         self.tempo = tempo
 
     def __str__(self):
-        return "sine=frequency={}:duration={}".format(
-            Frequency[self.freq], str(_get_seconds(self.duration, self.tempo)))
+        return "synth {} pluck {}".format(str(_get_seconds(self.duration, self.tempo)),
+            Frequency[self.freq])
 
 class NoteSequence(object):
     def __init__(self):

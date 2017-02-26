@@ -35,9 +35,9 @@ class Track(object):
             fname = str(index).zfill(4)
 
             result.append('{program} {options} '
-                '-i "{inp}" {prefix}/{fname}.wav'.format(
-                    program="ffmpeg",
-                    options="-y -f lavfi",
+                '-n {prefix}/{fname}.wav {inp}'.format(
+                    program="sox",
+                    options="",
                     inp=note,
                     prefix=self.prefix,
                     fname=fname,
