@@ -63,10 +63,14 @@ class Note(object):
 
     def __str__(self):
         if Frequency[self.freq] == 0:
+            # Dirty fix: Use normal sine wave for 0 freq to avoid errors with some wave types
             return "synth {} sine {}".format(str(_get_seconds(self.duration, self.tempo)),
                     Frequency[self.freq])
         else:
-            return "synth {} pluck {}".format(str(_get_seconds(self.duration, self.tempo)),
+            # Modify the "sine" to use another type of wave
+            # See "man sox" for available types
+            # Beware: Sometimes sox throws "invalid frequency" errors with some wave types on some freqs
+            return "synth {} sine {}".format(str(_get_seconds(self.duration, self.tempo)),
                     Frequency[self.freq])
 
 class NoteSequence(object):
