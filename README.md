@@ -1,2 +1,2 @@
 # nurullah
-Generate music on the terminal using Python, ffmpeg and aplay 
+Generate music on the terminal using Python, sox and aplay 
