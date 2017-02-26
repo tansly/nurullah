@@ -26,7 +26,7 @@ count=0
 
 for track in /tmp/nurullah/*
 do
-    find $track/*.wav -print0 | xargs -0 -i -P $(nproc) -n 1 sox '{}' -t s16 -r 44100 -c 1 '{}'.raw
+    find $track/*.wav -print0 | xargs -0 -i -P $(nproc) -n 1 sox -v 0.50 '{}' -t s16 -r 44100 -c 1 '{}'.raw
     cat $track/*.raw > $track/out.pcm
     sox -t s16 -r 44100 -c 1 $track/out.pcm /tmp/nurullah/out_${track##*/}.wav
     count=$((count+1))
