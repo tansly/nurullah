@@ -26,27 +26,20 @@ count=0
 
 for track in /tmp/nurullah/*
 do
-	for i in $track/*.wav
-	do
-		ffmpeg -y -i $i -f s16le -acodec pcm_s16le $i.raw &
-	done
-	wait
-
-	cat $track/*.raw > $track/out.pcm
-	echo $track
-	ffmpeg -f s16le -ar 44.1k -ac 1 -i $track/out.pcm /tmp/nurullah/out_${track##*/}.wav
-	rm -rf $track
-	count=$((count+1))
+    find $track/*.wav -print0 | xargs -0 -i -P $(nproc) -n 1 sox '{}' -t s16 -r 44100 -c 1 '{}'.raw
+    cat $track/*.raw > $track/out.pcm
+    sox -t s16 -r 44100 -c 1 $track/out.pcm /tmp/nurullah/out_${track##*/}.wav
+    count=$((count+1))
 done
 
 if [ "$count" -ne 1 ]
 then
-    ffmpeg -y $(
-        for out in `seq 0 $((count -1))`
-        do
-            echo "-i /tmp/nurullah/out_$out.wav"
-        done
-    ) -filter_complex amix=inputs=$count:duration=first:dropout_transition=3 output.wav
+    sox -m $(
+    for out in `seq 0 $((count -1))`
+    do
+        echo "/tmp/nurullah/out_$out.wav"
+    done
+    ) output.wav
 else
     mv /tmp/nurullah/out_*.wav output.wav
 fi
